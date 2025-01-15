@@ -10,9 +10,9 @@ uniform vec3 light_color;
 
 void main()
 {
-    float specular_strength = 1;
-    vec3 reflect_vec = reflect(-light_vec, face_normal);
-    float specular = pow(max(dot(reflect_vec, camera_vec), 0), 32);
+    float specular_strength = 0.5;
+    vec3 reflect_vec = normalize(reflect(-light_vec, face_normal));
+    float specular = pow(max(dot(reflect_vec, normalize(camera_vec)), 0), 8);
     vec3 specular_vec = specular * specular_strength * light_color;
 
     float light_streght =  max(dot(light_vec, face_normal), 0);
