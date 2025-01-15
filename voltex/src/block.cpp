@@ -35,10 +35,6 @@ void Block::Create_block(bool is_texture, const char* block_images_path[], const
     }
     // std::cout << (GLsizeiptr)(Block_vertices.size() * sizeof(Vertex));
     // std::cout<< Block_vertices.data();
-    data.Buffer_array_data(Block_vertices.data(), (GLsizeiptr)(Block_vertices.size() * sizeof(Vertex)), GL_STATIC_DRAW);
-    std::cout<< getOffsetOfNormal() << std::endl;
-    data.AttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfPos());
-    data.AttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfColor());
-    data.AttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfNormal());
-
+    
 }
+

@@ -3,14 +3,21 @@
 #include "texture.hpp"
 #include "block.hpp"
 #include "const.hpp"
+#include "handle_data.hpp"
 
 
 #include "stb_image.h"
 
-
-void load_cube(){
-    
+void buffer_data(Block block_class, Graphic_data& GP){
+    GP.Buffer_array_data(block_class.Block_vertices.data(), (GLsizeiptr)(block_class.Block_vertices.size() * sizeof(Vertex)), GL_STATIC_DRAW);
+    // std::cout<< block_class.Block_vertices[0].m_pos.x << std::endl;
+    // std::cout<< block_class.Block_vertices[0].m_pos.y << std::endl;
+    // std::cout<< block_class.Block_vertices[0].m_pos.z << std::endl;
+    GP.AttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfPos());
+    GP.AttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfColor());
+    GP.AttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfNormal());
 }
+
 
 int main(int argc, char* argv[]) {
     Window screen("hello", WIDTH_WIN, HIGHT_WIN, SDL_INIT_VIDEO, SDL_WINDOW_OPENGL);
@@ -41,8 +48,15 @@ int main(int argc, char* argv[]) {
     "resources/image/test_block/Block_down.jpg"
     };
 
-    Block test(glm::vec3(0,0,0), 1, 1, 1);
+    glm::vec3 light_coord = glm::vec3(5, 10, 0);
+
+    Block test(glm::vec3(0,0,0), 10, 1, 10);
     test.Create_block(false, Block_tex, face_create_key, glm::vec3(0.5, 1, 0.3), normal_face_vector);
+    Block sunlight(light_coord, 0.5, 0.5, 0.5);
+    sunlight.Create_block(false, Block_tex, face_create_key, glm::vec3(1, 1, 1), normal_face_vector);
+
+    Graphic_data data;
+    buffer_data(test, data);
 
     screen.swap_mouse(WIDTH_WIN / 2, HIGHT_WIN / 2);
     
@@ -54,11 +68,24 @@ int main(int argc, char* argv[]) {
         Shader_rec.activate();
         // Shader_rec.uniformVec3("vertexColor", 1.0f, 0.5f, 0.3f);
         Shader_rec.uniformVec3("light_color", glm::vec3(1, 1, 1));
-        Shader_rec.uniformVec3("light_pos", glm::vec3(5, 10, 15));
-        
-        test.data.Bind_vertex_array();
-        Main_view.set_position(Shader_rec, glm::vec3(0,0,0), 0, 0);
+        Shader_rec.uniformVec3("light_pos", light_coord);
+        Shader_rec.uniformVec3("camera_pos", Main_view.Camera_pos);
+        // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
+        buffer_data(test, data);
+        data.Bind_vertex_array();
+        Main_view.set_position(Shader_rec, test.Position, 0, 0);
         Main_view.set_camera_pos(Shader_rec);
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        //draw sun
+
+        buffer_data(sunlight, data);
+        data.Bind_vertex_array();
+        Main_view.set_position(Shader_rec, sunlight.Position, 0, 0);
+        Main_view.set_camera_pos(Shader_rec);
+        Shader_rec.uniformVec3("light_color", glm::vec3(10, 10, 10));
+        Shader_rec.uniformVec3("light_pos", glm::vec3(0,0,0));
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -90,3 +117,4 @@ int main(int argc, char* argv[]) {
     Shader_rec.purge();
     return 0;
 }
+

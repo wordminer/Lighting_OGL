@@ -5,7 +5,6 @@
 #include <vector>
 #include "glm.hpp"
 #include "vertex.hpp"
-#include "handle_data.hpp"
 
 
 
@@ -18,8 +17,7 @@ public:
 
     Block(glm::fvec3 mPosition, float x_side, float y_side, float z_side);
     void Create_block(bool is_texture, const char* block_images_path[], const int face_key[], glm::vec3 Color,glm::fvec3 face_vector[]);
-
-    Graphic_data data;
+   
 };
 
 #endif 

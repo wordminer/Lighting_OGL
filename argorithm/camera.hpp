@@ -26,9 +26,11 @@ public:
 	void control_mouse(Window& game_win, int win_width,int win_hight);
 	void control_moving();
 
-private:
 	glm::vec3 Camera_pos;
 	glm::vec3 Target_point;
+
+private:
+	
 	glm::vec3 Camera_up = glm::vec3(0, 1, 0);
 	glm::vec3 Side_vector, Forward_vector;
 
