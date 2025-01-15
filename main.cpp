@@ -4,6 +4,7 @@
 #include "block.hpp"
 #include "const.hpp"
 #include "handle_data.hpp"
+#include "materials.hpp"
 
 
 #include "stb_image.h"
@@ -56,7 +57,18 @@ int main(int argc, char* argv[]) {
     sunlight.Create_block(false, Block_tex, face_create_key, glm::vec3(1, 1, 1), normal_face_vector);
 
     Graphic_data data;
-    buffer_data(test, data);
+   
+    Material iron{
+        glm::vec3(1, 1, 1),
+        glm::vec3(0.5, 0.5, 0.5),
+        glm::vec3(0.3, 0.3, 0.3)
+    };
+
+    Material light{
+        glm::vec3(1, 1, 1),
+        glm::vec3(1, 1, 1),
+        glm::vec3(1, 1, 1)
+    };    
 
     screen.swap_mouse(WIDTH_WIN / 2, HIGHT_WIN / 2);
     
@@ -67,10 +79,11 @@ int main(int argc, char* argv[]) {
         screen.clear_color(0.2f, 0.3f, 0.3f, 1.0f);
         Shader_rec.activate();
         // Shader_rec.uniformVec3("vertexColor", 1.0f, 0.5f, 0.3f);
-        Shader_rec.uniformVec3("light_color", glm::vec3(1, 1, 1));
         Shader_rec.uniformVec3("light_pos", light_coord);
         Shader_rec.uniformVec3("camera_pos", Main_view.Camera_pos);
-        // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
+        set_material_uniform(Shader_rec, iron);
+        set_light_uniform(Shader_rec, light);
+            // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
         buffer_data(test, data);
         data.Bind_vertex_array();
         Main_view.set_position(Shader_rec, test.Position, 0, 0);
@@ -80,14 +93,14 @@ int main(int argc, char* argv[]) {
 
         //draw sun
 
-        buffer_data(sunlight, data);
-        data.Bind_vertex_array();
-        Main_view.set_position(Shader_rec, sunlight.Position, 0, 0);
-        Main_view.set_camera_pos(Shader_rec);
-        Shader_rec.uniformVec3("light_color", glm::vec3(10, 10, 10));
-        Shader_rec.uniformVec3("light_pos", glm::vec3(0,0,0));
+        // buffer_data(sunlight, data);
+        // data.Bind_vertex_array();
+        // Main_view.set_position(Shader_rec, sunlight.Position, 0, 0);
+        // Main_view.set_camera_pos(Shader_rec);
+        // Shader_rec.uniformVec3("light_color", glm::vec3(10, 10, 10));
+        // Shader_rec.uniformVec3("light_pos", glm::vec3(0,0,0));
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
         while (SDL_PollEvent(&event)) {

@@ -17,7 +17,7 @@ uniform mat4 projection;
 
 void main()
 {
-    camera_vec = normalize(camera_pos - aPos);
+    camera_vec = (camera_pos - aPos);
     light_vec = normalize(light_pos - aPos);
     gl_Position = projection * view * model * vec4(aPos, 1.0f);
     ob_color = aColor;
