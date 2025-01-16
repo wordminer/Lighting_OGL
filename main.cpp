@@ -58,9 +58,10 @@ int main(int argc, char* argv[]) {
         "resources/image/iron/iron.jpg",
         "resources/image/iron/iron.jpg",
         "resources/image/iron/iron.jpg"
-    };
+    }; 
 
     Block_texture block_test(iron_tex);
+    block_test.Set_shader_texture(Shader_rec);
 
     glm::vec3 light_coord = glm::vec3(5, 10, 0);
 
@@ -74,7 +75,8 @@ int main(int argc, char* argv[]) {
     Material iron{
         glm::vec3(0.508273, 0.508273, 0.508273),
         glm::vec3(0.50754, 0.50754, 0.50754),
-        glm::vec3(0.19225, 0.19225,	0.19225)
+        glm::vec3(0.19225, 0.19225,	0.19225),
+        0.4
     }; 
 
     Material light{
@@ -97,7 +99,7 @@ int main(int argc, char* argv[]) {
         set_material_uniform(Shader_rec, iron);
         set_light_uniform(Shader_rec, light);
         block_test.Bind_texture();
-        block_test.Set_shader_texture(Shader_rec);
+        
             // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
         buffer_data(test, data);
         data.Bind_vertex_array();

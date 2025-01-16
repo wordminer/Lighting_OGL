@@ -13,6 +13,7 @@ struct Material{
     vec3 specular;
     vec3 defuse;
     vec3 ambient;
+    float shininess;
 };
 
 struct Light {
@@ -41,7 +42,9 @@ void main()
     vec3 difuse = defuse_streght * material.defuse * light.defuse;
 
     vec3 reflect_vec = normalize(reflect(-light_vec, norm));
-    float specular = pow(max(dot(reflect_vec, normalize(camera_vec)), 0), 16);
+    float reflect_check = dot(reflect_vec, norm);
+    float negative_check = max(reflect_check, 0) / reflect_check;
+    float specular = pow(max(dot(reflect_vec, normalize(camera_vec)) * negative_check, 0), material.shininess);
     vec3 specular_vec = specular * material.specular * light.specular;
 
     vec3 ourColor = (ambient + difuse + specular_vec) ;
