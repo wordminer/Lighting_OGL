@@ -5,7 +5,7 @@ Block::Block(glm::fvec3 mPosition, float x_side, float y_side, float z_side){
     lengh_side = glm::fvec3(x_side, y_side, z_side);
 }
 
-void Block::Create_block(bool is_texture, const char* block_images_path[], const int face_key[], glm::vec3 Color,glm::fvec3 face_vector[]){
+void Block::Create_block(bool is_texture, const char* block_images_path[], const int face_key[], glm::vec3 Color,glm::fvec3 face_vector[], glm::fvec2 Tex_coord[]){
     int cout = 0 ;
    
     for (int z_axis = -1; z_axis <= 1; z_axis += 2){
@@ -24,9 +24,9 @@ void Block::Create_block(bool is_texture, const char* block_images_path[], const
             int start_key = face * 6 + triangle * 3;
             //std::cout<<start_key;
             Vertex v0, v1, v2;
-            v0 = Vertex(Block_coord[face_key[start_key]], Color, face   , face_vector[face]);
-            v1 = Vertex(Block_coord[face_key[start_key+ 1]], Color, face, face_vector[face]);
-            v2 = Vertex(Block_coord[face_key[start_key+ 2]], Color, face, face_vector[face]);
+            v0 = Vertex(Block_coord[face_key[start_key]], Color, face   , face_vector[face], Tex_coord[triangle*3]);
+            v1 = Vertex(Block_coord[face_key[start_key+ 1]], Color, face, face_vector[face], Tex_coord[triangle*3 + 1]);
+            v2 = Vertex(Block_coord[face_key[start_key+ 2]], Color, face, face_vector[face], Tex_coord[triangle*3 + 2]);
             Block_vertices.insert(Block_vertices.end(),{v0, v1, v2});
             // std::cout<< v0.m_pos.x<< v0.m_pos.y<< v0.m_pos.z<< std::endl;
             // std::cout<< v1.m_pos.x<< v1.m_pos.y<< v1.m_pos.z<< std::endl;

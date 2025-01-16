@@ -17,6 +17,8 @@ void buffer_data(Block block_class, Graphic_data& GP){
     GP.AttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfPos());
     GP.AttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfColor());
     GP.AttribPointer(2, 3, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfNormal());
+    GP.AttribPointer(3, 2, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfTexCoord());
+    GP.AttribPointer(4, 2, GL_FLOAT, false, sizeof(Vertex), (void *)getOffsetOfFaceID());
 }
 
 
@@ -49,20 +51,31 @@ int main(int argc, char* argv[]) {
     "resources/image/test_block/Block_down.jpg"
     };
 
+    const char* iron_tex[] = {
+        "resources/image/iron/iron.jpg",
+        "resources/image/iron/iron.jpg",
+        "resources/image/iron/iron.jpg",
+        "resources/image/iron/iron.jpg",
+        "resources/image/iron/iron.jpg",
+        "resources/image/iron/iron.jpg"
+    };
+
+    Block_texture block_test(iron_tex);
+
     glm::vec3 light_coord = glm::vec3(5, 10, 0);
 
-    Block test(glm::vec3(0,0,0), 10, 1, 10);
-    test.Create_block(false, Block_tex, face_create_key, glm::vec3(0.5, 1, 0.3), normal_face_vector);
-    Block sunlight(light_coord, 0.5, 0.5, 0.5);
-    sunlight.Create_block(false, Block_tex, face_create_key, glm::vec3(1, 1, 1), normal_face_vector);
+    Block test(glm::vec3(0,0,0), 3, 3, 3);
+    test.Create_block(false, Block_tex, face_create_key, glm::vec3(0.5, 1, 0.3), normal_face_vector, Texture_coord_face);
+    // Block sunlight(light_coord, 0.5, 0.5, 0.5);
+    // sunlight.Create_block(false, Block_tex, face_create_key, glm::vec3(1, 1, 1), normal_face_vector);
 
     Graphic_data data;
    
     Material iron{
-        glm::vec3(1, 1, 1),
-        glm::vec3(0.5, 0.5, 0.5),
-        glm::vec3(0.3, 0.3, 0.3)
-    };
+        glm::vec3(0.508273, 0.508273, 0.508273),
+        glm::vec3(0.50754, 0.50754, 0.50754),
+        glm::vec3(0.19225, 0.19225,	0.19225)
+    }; 
 
     Material light{
         glm::vec3(1, 1, 1),
@@ -83,6 +96,8 @@ int main(int argc, char* argv[]) {
         Shader_rec.uniformVec3("camera_pos", Main_view.Camera_pos);
         set_material_uniform(Shader_rec, iron);
         set_light_uniform(Shader_rec, light);
+        block_test.Bind_texture();
+        block_test.Set_shader_texture(Shader_rec);
             // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
         buffer_data(test, data);
         data.Bind_vertex_array();

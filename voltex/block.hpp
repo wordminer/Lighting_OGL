@@ -16,7 +16,7 @@ public:
     glm::fvec3 lengh_side; 
 
     Block(glm::fvec3 mPosition, float x_side, float y_side, float z_side);
-    void Create_block(bool is_texture, const char* block_images_path[], const int face_key[], glm::vec3 Color,glm::fvec3 face_vector[]);
+    void Create_block(bool is_texture, const char* block_images_path[], const int face_key[], glm::vec3 Color,glm::fvec3 face_vector[], glm::fvec2 Tex_coord[]);
    
 };
 
