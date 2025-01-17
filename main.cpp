@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     Block_texture block_test(iron_tex);
     block_test.Set_shader_texture(Shader_rec);
 
-    glm::vec3 light_coord = glm::vec3(5, 10, 0);
+    glm::vec3 light_coord = glm::vec3(5, 10, 5);
 
     Block test(glm::vec3(0,0,0), 3, 3, 3);
     test.Create_block(false, Block_tex, face_create_key, glm::vec3(0.5, 1, 0.3), normal_face_vector, Texture_coord_face);
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
         glm::vec3(0.508273, 0.508273, 0.508273),
         glm::vec3(0.50754, 0.50754, 0.50754),
         glm::vec3(0.19225, 0.19225,	0.19225),
-        0.4
+        4
     }; 
 
     Material light{
