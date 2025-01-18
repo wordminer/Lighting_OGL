@@ -28,9 +28,9 @@ void Camera::set_position(ShaderProgram Shader, glm::vec3 Position, float* Angle
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, Position);
 
-	/*for (int i = 0; i < 3 && Angle_rotate[i] != 0; i++) {
+	for (int i = 0; i < 3; i++) {
 		model = glm::rotate(model, glm::radians(Angle_rotate[i]), Vector_rotate[i]);
-	}*/
+	}
 
 	Shader.uniformMat4f("model", 1, false, model);
 	

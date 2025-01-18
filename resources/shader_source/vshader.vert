@@ -22,8 +22,9 @@ uniform mat4 projection;
 
 void main()
 {
-    camera_vec = (camera_pos - aPos);
-    light_vec = normalize(light_pos - aPos);
+    vec3 Pos_convert = mat3(transpose(inverse(model))) * aPos;
+    camera_vec = (camera_pos - Pos_convert);
+    light_vec = normalize(light_pos - Pos_convert);
     ob_color = aColor;
     
     face_normal = mat3(transpose(inverse(model))) * aNormal;

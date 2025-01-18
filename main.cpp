@@ -86,8 +86,16 @@ int main(int argc, char* argv[]) {
     };    
 
     screen.swap_mouse(WIDTH_WIN / 2, HIGHT_WIN / 2);
+
+    float Angle_rotate[] = {0,0.1,0};
+    glm::vec3 Vector_rotate[] = {
+        glm::vec3(1,0,0),
+        glm::vec3(0,1,0),
+        glm::vec3(0,0,1)
+    };
     
     while (running) {
+        Angle_rotate[1] += 0.1;
         //SDL_GetMouseState(&mouse_current_x, &mouse_current_y);
         Main_view.control_mouse(screen, WIDTH_WIN, HIGHT_WIN);
 
@@ -102,7 +110,7 @@ int main(int argc, char* argv[]) {
             // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
         buffer_data(test, data);
         data.Bind_vertex_array();
-        Main_view.set_position(Shader_rec, test.Position, 0, 0);
+        Main_view.set_position(Shader_rec, test.Position, Angle_rotate, Vector_rotate);
         Main_view.set_camera_pos(Shader_rec);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
