@@ -60,9 +60,7 @@ int main(int argc, char* argv[]) {
         "resources/image/iron/iron.jpg"
     }; 
 
-    Block_texture block_test(iron_tex);
-    block_test.Set_shader_texture(Shader_rec);
-
+    
     glm::vec3 light_coord = glm::vec3(5, 10, 5);
 
     Block test(glm::vec3(0,0,0), 3, 3, 3);
@@ -71,15 +69,17 @@ int main(int argc, char* argv[]) {
     // sunlight.Create_block(false, Block_tex, face_create_key, glm::vec3(1, 1, 1), normal_face_vector);
 
     Graphic_data data;
-   
-    Material iron{
-        glm::vec3(0.508273, 0.508273, 0.508273),
-        glm::vec3(0.50754, 0.50754, 0.50754),
-        glm::vec3(0.19225, 0.19225,	0.19225),
-        4
-    }; 
 
-    Material light{
+    const char* container_defuse = "resources/image/container/container2.jpg";
+    const char* container_specular = "resources/image/container/container2_specular.jpg";
+    Material container = Material(container_specular, container_defuse,
+                            glm::vec3(0.1, 0.1, 0.1), 8);
+    
+    Shader_rec.activate();
+    Shader_rec.uniformInt("material.defuse", 0);
+    Shader_rec.uniformInt("material.specular", 1);
+
+    Light light{
         glm::vec3(1, 1, 1),
         glm::vec3(1, 1, 1),
         glm::vec3(1, 1, 1)
@@ -96,9 +96,8 @@ int main(int argc, char* argv[]) {
         // Shader_rec.uniformVec3("vertexColor", 1.0f, 0.5f, 0.3f);
         Shader_rec.uniformVec3("light_pos", light_coord);
         Shader_rec.uniformVec3("camera_pos", Main_view.Camera_pos);
-        set_material_uniform(Shader_rec, iron);
+        set_material_uniform(Shader_rec, container);
         set_light_uniform(Shader_rec, light);
-        block_test.Bind_texture();
         
             // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
         buffer_data(test, data);
