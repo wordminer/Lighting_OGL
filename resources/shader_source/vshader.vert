@@ -12,7 +12,7 @@ out vec3 camera_vec;
 
 out vec2 TexCoord;
 out vec2 Face;
-
+    
 uniform vec3 light_pos;
 uniform vec3 camera_pos;
 
@@ -22,9 +22,9 @@ uniform mat4 projection;
 
 void main()
 {
-    vec3 Pos_convert = mat3(transpose(inverse(model))) * aPos;
+    vec3 Pos_convert = vec3(model * vec4(aPos, 1.0));
     camera_vec = (camera_pos - Pos_convert);
-    light_vec = normalize(light_pos - Pos_convert);
+    light_vec = (light_pos - Pos_convert);
     ob_color = aColor;
     
     face_normal = mat3(transpose(inverse(model))) * aNormal;

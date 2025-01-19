@@ -61,14 +61,16 @@ int main(int argc, char* argv[]) {
     }; 
 
     
-    glm::vec3 light_coord = glm::vec3(5, 10, 5);
+    glm::vec3 light_coord = glm::vec3(3, 0, 0);
 
-    Block test(glm::vec3(0,0,0), 3, 3, 3);
+    Block test(glm::vec3(0,0,0), 1, 1, 1);
     test.Create_block(false, Block_tex, face_create_key, glm::vec3(0.5, 1, 0.3), normal_face_vector, Texture_coord_face);
     // Block sunlight(light_coord, 0.5, 0.5, 0.5);
     // sunlight.Create_block(false, Block_tex, face_create_key, glm::vec3(1, 1, 1), normal_face_vector);
 
     Graphic_data data;
+    buffer_data(test, data);
+    data.Bind_vertex_array();
 
     const char* container_defuse = "resources/image/container/container2.jpg";
     const char* container_specular = "resources/image/container/container2_specular.jpg";
@@ -78,6 +80,13 @@ int main(int argc, char* argv[]) {
     Shader_rec.activate();
     Shader_rec.uniformInt("material.defuse", 0);
     Shader_rec.uniformInt("material.specular", 1);
+    Shader_rec.uniformFloat("material.Contant", 1);
+    Shader_rec.uniformFloat("material.linear", 0.14);
+    Shader_rec.uniformFloat("material.quadratic", 0.007);
+    Shader_rec.uniformFloat("light.spotlight_angle", glm::cos(glm::radians(10.0f)));
+    Shader_rec.uniformVec3("light_pos", glm::vec3(3, 3, 0));
+    Shader_rec.uniformVec3("light.Look_vec", glm::vec3(1,1,1));
+
 
     Light light{
         glm::vec3(1, 1, 1),
@@ -93,28 +102,39 @@ int main(int argc, char* argv[]) {
         glm::vec3(0,1,0),
         glm::vec3(0,0,1)
     };
+
+    glm::vec3 Block_positions[] = {
+        glm::vec3(0, 0, 0),
+        glm::vec3(5, 3, 4),
+        glm::vec3(-3, 2, 1),
+        glm::vec3(-2, -1, -2),
+        glm::vec3(5, 4, -3)
+    };
     
     while (running) {
-        Angle_rotate[1] += 0.1;
+        //Angle_rotate[1] += 0.1;
         //SDL_GetMouseState(&mouse_current_x, &mouse_current_y);
         Main_view.control_mouse(screen, WIDTH_WIN, HIGHT_WIN);
 
         screen.clear_color(0.2f, 0.3f, 0.3f, 1.0f);
         Shader_rec.activate();
         // Shader_rec.uniformVec3("vertexColor", 1.0f, 0.5f, 0.3f);
-        Shader_rec.uniformVec3("light_pos", light_coord);
+        
         Shader_rec.uniformVec3("camera_pos", Main_view.Camera_pos);
+        Shader_rec.uniformVec3("light_pos", Main_view.Camera_pos);
+        Shader_rec.uniformVec3("light.Look_vec", Main_view.Target_point); 
+
         set_material_uniform(Shader_rec, container);
         set_light_uniform(Shader_rec, light);
         
             // std::cout << Main_view.Camera_pos.x << Main_view.Camera_pos.y << Main_view.Camera_pos.z;
-        buffer_data(test, data);
-        data.Bind_vertex_array();
-        Main_view.set_position(Shader_rec, test.Position, Angle_rotate, Vector_rotate);
+        
         Main_view.set_camera_pos(Shader_rec);
+        for (int i = 0; i < 5; i++ ){    
+            Main_view.set_position(Shader_rec, Block_positions[i], Angle_rotate, Vector_rotate);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
         //draw sun
 
         // buffer_data(sunlight, data);
